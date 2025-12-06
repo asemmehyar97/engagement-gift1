@@ -12,16 +12,16 @@
         body { 
             background-color: #000; 
             font-family: 'Georgia', serif; 
-            color: #93C572; /* Pistachio Green */
+            color: #93C572; 
             overflow-x: hidden;
         }
 
-        /* FIXED & CENTERED VIDEO BACKGROUND */
+        /* CENTERED VIDEO BACKGROUND */
         #bg-video {
             position: fixed;
             top: 0;
-            left: 50%; /* Center horizontally */
-            transform: translateX(-50%); /* Adjust for perfect centering */
+            left: 50%; 
+            transform: translateX(-50%); 
             min-width: 100%; 
             min-height: 100%;
             width: auto;
@@ -29,18 +29,19 @@
             z-index: -1; 
             opacity: 0.5; 
             object-fit: cover; 
-            background: #000; /* Fallback */
+            background: #000; 
         }
 
         /* MAIN CONTAINER */
         .story-container {
             width: 100%;
-            background: rgba(0,0,0,0.2); /* Light overlay */
+            /* Subtle gradient to help text readability without hiding video */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
         }
 
-        /* THE PHOTO CARDS */
+        /* THE PHOTO CARDS - DESKTOP DEFAULT */
         .card {
-            position: sticky;
+            position: sticky; /* Stacking effect on Desktop */
             top: 0;
             height: 100vh; 
             width: 100%;
@@ -50,12 +51,11 @@
             align-items: center;
             overflow: hidden;
             
-            /* KEY FIX: Solid background ensures no messy overlapping */
-            background-color: #000; 
+            /* Transparent again so video shows! */
+            background-color: transparent; 
             
-            box-shadow: 0 -5px 20px rgba(147, 197, 114, 0.1); /* Subtle green glow on edges */
+            box-shadow: none;
             padding: 10px;
-            border-bottom: 1px solid #111; /* Separator line */
         }
 
         /* IMAGE STYLING */
@@ -69,12 +69,10 @@
             align-items: center;
             overflow: hidden; 
             border-radius: 8px;
-            /* Visible shadow to pop off the black background */
-            box-shadow: 0 10px 40px rgba(0,0,0,1); 
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
             opacity: 0;
             transform: scale(0.95);
             transition: all 0.8s ease-out;
-            background-color: #000; /* Double safety for overlaps */
         }
         .image-wrapper.visible {
             opacity: 1;
@@ -98,8 +96,7 @@
             transform: translateY(20px);
             transition: all 0.8s ease-out 0.2s; 
             z-index: 10;
-            /* Frosted glass style */
-            background-color: rgba(20, 20, 20, 0.8); 
+            background-color: rgba(0, 0, 0, 0.6); 
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 15px;
@@ -126,11 +123,12 @@
             color: #ddd; 
         }
 
-        /* FINAL MESSAGE */
+        /* FINAL MESSAGE - SOLID BACKGROUND FOR READABILITY */
         .final-message {
             position: relative; 
             min-height: 100vh; 
-            background-color: #000; /* Solid black to cover last photo */
+            /* Keep this solid black so the end text is readable */
+            background-color: #000; 
             display: flex; 
             flex-direction: column;
             justify-content: center; 
@@ -183,6 +181,24 @@
             100% { box-shadow: 0 0 0 0 rgba(147, 197, 114, 0); }
         }
 
+        /* --- MOBILE OPTIMIZATION (THE FIX) --- */
+        @media (max-width: 768px) {
+            /* Disable sticky on mobile so cards scroll normally.
+               This prevents transparent cards from overlapping messily. */
+            .card {
+                position: relative; 
+                height: auto;
+                min-height: 90vh; /* Ensures full screen feel */
+                padding-top: 50px;
+                padding-bottom: 50px;
+                background-color: transparent; /* Ensures video shows */
+            }
+            
+            .image-wrapper {
+                max-height: 50vh;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -232,9 +248,6 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
-                    } else {
-                        // Keep visible once scrolled to prevent flickering
-                        // entry.target.classList.remove('visible'); 
                     }
                 });
             }, { threshold: 0.2 });
