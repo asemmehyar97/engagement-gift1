@@ -7,6 +7,10 @@
     <style>
         /* RESET & BASICS */
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html {
+            /* Makes scrolling feel smoother and more elegant */
+            scroll-behavior: smooth; 
+        }
         body { 
             background-color: #000; 
             font-family: 'Georgia', serif; 
@@ -22,85 +26,111 @@
             bottom: 0;
             min-width: 100%; 
             min-height: 100%;
-            z-index: -1; /* Places video behind everything else */
-            opacity: 0.6; /* Slight transparency to make text readable */
-            object-fit: cover; /* Ensures video covers screen without stretching */
+            z-index: -1; 
+            /* Slight transparency to make content pop */
+            opacity: 0.4; 
+            object-fit: cover; 
         }
 
-        /* SCROLLYTELLING CONTAINER */
+        /* MAIN CONTAINER */
         .story-container {
             width: 100%;
-            /* Dark overlay to improve text readability against video */
-            background-color: rgba(0,0,0,0.6); 
+            /* Adds a subtle dark gradient for better text readability */
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));
         }
 
         /* THE PHOTO CARDS */
         .card {
+            /* 'sticky' is key for the stacking effect */
             position: sticky;
             top: 0;
+            /* Full screen height for each section */
             height: 100vh; 
             width: 100%;
             display: flex;
+            flex-direction: column; /* Stacks image on top of text */
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* Transparent background so video shows through */
             background-color: transparent; 
-            /* Solid shadow to separate cards visually */
-            box-shadow: 0 -10px 20px rgba(0,0,0,0.8); 
+            /* Strong shadow to separate stacked cards */
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.9);
+            padding: 20px;
         }
 
-        /* IMAGE STYLING */
+        /* IMAGE STYLING WITH PARALLAX */
         .image-wrapper {
             position: relative;
-            width: 100%;
-            height: 100%;
+            width: auto;
+            /* Limits image height so there's room for text below */
+            max-height: 65vh; 
             display: flex;
             justify-content: center;
             align-items: center;
+            overflow: hidden; /* Hides the overflowing parallax image */
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            /* Initial state for scroll animation */
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.8s ease-out;
+        }
+        /* Class added by JS to trigger image appearance */
+        .image-wrapper.visible {
+            opacity: 1;
+            transform: scale(1);
         }
 
         .card img {
-            /* Adjust max-width/height to control image size on screen */
-            max-width: 90%; 
-            max-height: 80vh;
-            object-fit: contain; 
-            display: block;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Soft shadow for depth */
-            border-radius: 4px;
+            /* Slightly larger than wrapper for parallax effect */
+            height: 110%; 
+            width: auto;
+            object-fit: contain;
+            /* Will be animated by JS for parallax */
+            transform: translateY(0); 
+            will-change: transform;
         }
 
         /* SCROLL-TRIGGERED TEXT CAPTIONS */
         .caption {
-            position: absolute;
-            /* Position text below image */
-            bottom: 5%; 
-            left: 50%;
-            transform: translateX(-50%);
+            /* Placed below image in normal flow */
+            position: relative;
+            margin-top: 25px;
             text-align: center;
             width: 90%;
             max-width: 600px;
             /* Initial state: hidden and slightly lower */
             opacity: 0;
-            transform: translate(-50%, 20px);
-            transition: opacity 1s ease-out, transform 1s ease-out;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out 0.2s; /* 0.2s delay after image appears */
             z-index: 10;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Shadow for readability */
-            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for text */
-            padding: 15px;
-            border-radius: 10px;
-            /* Allows scrolling even if user touches the text area */
-            pointer-events: none; 
+            /* Frosted glass effect for readability */
+            background-color: rgba(0, 0, 0, 0.4); 
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(147, 197, 114, 0.2); /* Subtle pistachio border */
         }
         
         /* Class added by JavaScript when section is visible */
         .caption.visible {
             opacity: 1;
-            transform: translate(-50%, 0);
+            transform: translateY(0);
         }
 
-        .caption h2 { font-size: 1.8rem; margin-bottom: 10px; font-weight: 400; }
-        .caption p { font-size: 1.1rem; line-height: 1.5; font-weight: 300; color: #e0e0e0; }
+        .caption h2 { 
+            font-size: 1.8rem; 
+            margin-bottom: 10px; 
+            font-weight: 400; 
+            letter-spacing: 1px;
+        }
+        .caption p { 
+            font-size: 1.1rem; 
+            line-height: 1.6; 
+            font-weight: 300; 
+            color: #e0e0e0; 
+        }
 
 
         /* FINAL MESSAGE SECTION */
@@ -115,17 +145,38 @@
             text-align: center;
             padding: 40px 20px;
             z-index: 100;
+            /* Ensure final message doesn't get stuck under last card */
+            margin-bottom: 50px; 
         }
 
-        .final-message h1 { font-size: 3rem; margin-bottom: 20px; }
-        .final-message p { font-size: 1.3rem; line-height: 1.6; max-width: 600px; color: #f0f0f0; margin-bottom: 40px; }
-        .signature { margin-top: 30px; font-style: italic; font-size: 1.5rem; }
+        .final-message h1 { 
+            font-size: 3.5rem; 
+            margin-bottom: 25px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        .final-message p { 
+            font-size: 1.3rem; 
+            line-height: 1.7; 
+            max-width: 600px; 
+            color: #f0f0f0; 
+            margin-bottom: 40px; 
+            /* Frosted glass for final message too */
+            background-color: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            padding: 30px;
+            border-radius: 15px;
+        }
+        .signature { 
+            margin-top: 30px; 
+            font-style: italic; 
+            font-size: 1.6rem; 
+        }
 
     </style>
 </head>
 <body>
 
-    <video autoplay muted loop id="bg-video">
+    <video autoplay muted loop playsinline id="bg-video">
         <source src="images/background.mp4" type="video/mp4">
     </video>
 
@@ -133,47 +184,127 @@
         
         <div class="card">
             <div class="image-wrapper">
-                <img src="images/1.jpg" alt="Photo 1">
-                <div class="caption">
-                    <h2>The Beginning</h2>
-                    <p>Where it all started. A moment captured in time.</p>
-                </div>
+                <img src="images/1.jpg" alt="The Beginning">
+            </div>
+            <div class="caption">
+                <h2>The Beginning</h2>
+                <p>Where it all started. A moment captured in time, just the two of you.</p>
             </div>
         </div>
 
         <div class="card">
             <div class="image-wrapper">
-                <img src="images/2.jpg" alt="Photo 2">
-                <div class="caption">
-                    <h2>Growing Closer</h2>
-                    <p>Every day, a new memory, a stronger bond.</p>
-                </div>
+                <img src="images/2.jpg" alt="Growing Closer">
+            </div>
+            <div class="caption">
+                <h2>In Separable</h2>
+                <p>Every day, a new memory, a stronger bond formed between hearts.</p>
             </div>
         </div>
 
         <div class="card">
             <div class="image-wrapper">
-                <img src="images/3.jpg" alt="Photo 3">
-                <div class="caption">
-                    <h2>Adventures Shared</h2>
-                    <p>Exploring the world, hand in hand.</p>
-                </div>
+                <img src="images/3.jpg" alt="Adventures Shared">
+            </div>
+            <div class="caption">
+                <h2>Adventures Await</h2>
+                <p>Exploring the world, hand in hand, with smiles as bright as the sun.</p>
             </div>
         </div>
 
-        <div class="card"><div class="image-wrapper"><img src="images/4.jpg" alt="Photo 4"><div class="caption"><h2>A Beautiful Moment</h2><p>Add your own text here...</p></div></div></div>
-        <div class="card"><div class="image-wrapper"><img src="images/5.jpg" alt="Photo 5"><div class="caption"><h2>Laughter & Joy</h2><p>Add your own text here...</p></div></div></div>
-        <div class="card"><div class="image-wrapper"><img src="images/6.jpg" alt="Photo 6"><div class="caption"><h2>Unforgettable</h2><p>Add your own text here...</p></div></div></div>
-        <div class="card"><div class="image-wrapper"><img src="images/7.jpg" alt="Photo 7"><div class="caption"><h2>Together Always</h2><p>Add your own text here...</p></div></div></div>
-        <div class="card"><div class="image-wrapper"><img src="images/8.jpg" alt="Photo 8"><div class="caption"><h2>Cherished</h2><p>Add your own text here...</p></div></div></div>
-        <div class="card"><div class="image-wrapper"><img src="images/9.jpg" alt="Photo 9"><div class="caption"><h2>A Perfect Day</h2><p>Add your own text here...</p></div></div></div>
-        <div class="card"><div class="image-wrapper"><img src="images/10.jpg" alt="Photo 10"><div class="caption"><h2>Building Dreams</h2><p>Add your own text here...</p></div></div></div>
-        <div class="card"><div class="image-wrapper"><img src="images/11.jpg" alt="Photo 11"><div class="caption"><h2>Forever & Always</h2><p>Add your own text here...</p></div></div></div>
-        <div class="card"><div class="image-wrapper"><img src="images/12.jpg" alt="Photo 12"><div class="caption"><h2>The 'Yes'</h2><p>The start of your forever chapter.</p></div></div></div>
+        <div class="card">
+            <div class="image-wrapper">
+                <img src="images/4.jpg" alt="Photo 4">
+            </div>
+            <div class="caption">
+                <h2>Pure Happiness</h2>
+                <p>The kind of joy that radiates and touches everyone around you.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="image-wrapper">
+                <img src="images/5.jpg" alt="Photo 5">
+            </div>
+            <div class="caption">
+                <h2>A Perfect Match</h2>
+                <p>Two souls that complement each other in every single way.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="image-wrapper">
+                <img src="images/6.jpg" alt="Photo 6">
+            </div>
+            <div class="caption">
+                <h2>Making Memories</h2>
+                <p>From the big moments to the small ones, every second counts.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="image-wrapper">
+                <img src="images/7.jpg" alt="Photo 7">
+            </div>
+            <div class="caption">
+                <h2>Side by Side</h2>
+                <p>Facing life's journey together, with unwavering support and love.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="image-wrapper">
+                <img src="images/8.jpg" alt="Photo 8">
+            </div>
+            <div class="caption">
+                <h2>Timeless Love</h2>
+                <p>A love story that continues to unfold beautifully with each passing day.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="image-wrapper">
+                <img src="images/9.jpg" alt="Photo 9">
+            </div>
+            <div class="caption">
+                <h2>Elegance & Grace</h2>
+                <p>A couple that shines with sophistication and genuine affection.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="image-wrapper">
+                <img src="images/10.jpg" alt="Photo 10">
+            </div>
+            <div class="caption">
+                <h2>Laughter is Key</h2>
+                <p>May your lives always be filled with this much happiness and laughter.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="image-wrapper">
+                <img src="images/11.jpg" alt="Photo 11">
+            </div>
+            <div class="caption">
+                <h2>Forever Feels</h2>
+                <p>The look of love that says "you are my everything."</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="image-wrapper">
+                <img src="images/12.jpg" alt="The 'Yes'">
+            </div>
+            <div class="caption">
+                <h2>The 'Yes'</h2>
+                <p>The start of your forever chapter. The most beautiful puzzle piece yet.</p>
+            </div>
+        </div>
 
 
         <div class="final-message">
-            <h1>Congratulations</h1>
+            <h1>Congratulations!</h1>
             <p>
                 Watching your journey has been beautiful. <br>
                 May you build a life together as perfectly fitting as the puzzle pieces you've assembled.<br>
@@ -188,30 +319,57 @@
     </div>
 
     <script>
-        // This script uses IntersectionObserver to detect when a caption is in view.
-        // When it is, it adds the 'visible' class, triggering the CSS fade-in animation.
         document.addEventListener("DOMContentLoaded", () => {
-            const captions = document.querySelectorAll('.caption');
+            const cards = document.querySelectorAll('.card');
 
+            // Options for the Intersection Observer
             const observerOptions = {
-                root: null, // Use the viewport as the root
-                threshold: 0.5 // Trigger when 50% of the caption is visible
+                root: null,
+                threshold: 0.4 // Trigger when 40% of the card is visible
             };
 
-            const observer = new IntersectionObserver((entries) => {
+            // Observer to handle fade-in animations for images and captions
+            const FadeObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
+                    // Get image wrapper and caption within the current card
+                    const imgWrapper = entry.target.querySelector('.image-wrapper');
+                    const caption = entry.target.querySelector('.caption');
+
                     if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
+                        // Add 'visible' class to trigger CSS transitions
+                        if (imgWrapper) imgWrapper.classList.add('visible');
+                        if (caption) caption.classList.add('visible');
                     } else {
                         // Optional: Remove class to fade out when scrolling away
-                        entry.target.classList.remove('visible'); 
+                        if (imgWrapper) imgWrapper.classList.remove('visible');
+                        if (caption) caption.classList.remove('visible'); 
                     }
                 });
             }, observerOptions);
 
-            captions.forEach(caption => {
-                observer.observe(caption);
+            // Observe each card
+            cards.forEach(card => {
+                FadeObserver.observe(card);
             });
+
+            // --- Simple Parallax Effect ---
+            // This function moves the image slightly within its wrapper based on scroll position
+            function parallaxScroll() {
+                cards.forEach(card => {
+                    const img = card.querySelector('img');
+                    // Get the card's position relative to the viewport
+                    const rect = card.getBoundingClientRect();
+                    // Calculate a small offset value based on position
+                    const offset = (rect.top - (window.innerHeight / 2)) * 0.1; 
+                    
+                    // Apply the offset as a transform to the image
+                    if (img) {
+                        img.style.transform = `translateY(${offset}px)`;
+                    }
+                });
+            }
+            // Listen for the scroll event to trigger the parallax function
+            window.addEventListener('scroll', parallaxScroll);
         });
     </script>
 
