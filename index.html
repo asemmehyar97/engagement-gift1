@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Special Gift for Ahmad and Tanya</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         /* RESET & BASICS */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html {
-            /* Makes scrolling feel smoother and more elegant */
             scroll-behavior: smooth; 
         }
         body { 
@@ -27,7 +27,6 @@
             min-width: 100%; 
             min-height: 100%;
             z-index: -1; 
-            /* Slight transparency to make content pop */
             opacity: 0.4; 
             object-fit: cover; 
         }
@@ -35,25 +34,21 @@
         /* MAIN CONTAINER */
         .story-container {
             width: 100%;
-            /* Adds a subtle dark gradient for better text readability */
             background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.8));
         }
 
         /* THE PHOTO CARDS */
         .card {
-            /* 'sticky' is key for the stacking effect */
             position: sticky;
             top: 0;
-            /* Full screen height for each section */
             height: 100vh; 
             width: 100%;
             display: flex;
-            flex-direction: column; /* Stacks image on top of text */
+            flex-direction: column; 
             justify-content: center;
             align-items: center;
             overflow: hidden;
             background-color: transparent; 
-            /* Strong shadow to separate stacked cards */
             box-shadow: 0 -10px 30px rgba(0,0,0,0.9);
             padding: 20px;
         }
@@ -62,58 +57,49 @@
         .image-wrapper {
             position: relative;
             width: auto;
-            /* Limits image height so there's room for text below */
-            max-height: 65vh; 
+            max-height: 60vh; /* Adjusted slightly to fit button better on mobile */
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* Hides the overflowing parallax image */
+            overflow: hidden; 
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            /* Initial state for scroll animation */
             opacity: 0;
             transform: scale(0.95);
             transition: all 0.8s ease-out;
         }
-        /* Class added by JS to trigger image appearance */
         .image-wrapper.visible {
             opacity: 1;
             transform: scale(1);
         }
 
         .card img {
-            /* Slightly larger than wrapper for parallax effect */
             height: 110%; 
             width: auto;
             object-fit: contain;
-            /* Will be animated by JS for parallax */
             transform: translateY(0); 
             will-change: transform;
         }
 
         /* SCROLL-TRIGGERED TEXT CAPTIONS */
         .caption {
-            /* Placed below image in normal flow */
             position: relative;
             margin-top: 25px;
             text-align: center;
             width: 90%;
             max-width: 600px;
-            /* Initial state: hidden and slightly lower */
             opacity: 0;
             transform: translateY(30px);
-            transition: all 0.8s ease-out 0.2s; /* 0.2s delay after image appears */
+            transition: all 0.8s ease-out 0.2s; 
             z-index: 10;
-            /* Frosted glass effect for readability */
             background-color: rgba(0, 0, 0, 0.4); 
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 20px;
             border-radius: 12px;
-            border: 1px solid rgba(147, 197, 114, 0.2); /* Subtle pistachio border */
+            border: 1px solid rgba(147, 197, 114, 0.2); 
         }
         
-        /* Class added by JavaScript when section is visible */
         .caption.visible {
             opacity: 1;
             transform: translateY(0);
@@ -137,7 +123,6 @@
         .final-message {
             position: relative; 
             min-height: 100vh; 
-            /* Dark background to separate from the last photo */
             background-color: rgba(0,0,0,0.85); 
             display: flex; 
             flex-direction: column;
@@ -160,7 +145,6 @@
             max-width: 600px; 
             color: #f0f0f0; 
             margin-bottom: 40px; 
-            /* Frosted glass for final message too */
             background-color: rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(5px);
             padding: 30px;
@@ -170,6 +154,36 @@
             margin-top: 30px; 
             font-style: italic; 
             font-size: 1.6rem; 
+            margin-bottom: 40px;
+        }
+
+        /* THE CELEBRATION BUTTON STYLE */
+        .celebrate-btn {
+            background-color: #93C572; /* Pistachio Green */
+            color: #000;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            font-family: 'Georgia', serif;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(147, 197, 114, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            animation: pulse 2s infinite;
+        }
+        .celebrate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(147, 197, 114, 0.6);
+        }
+        .celebrate-btn:active {
+            transform: scale(0.95);
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(147, 197, 114, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(147, 197, 114, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(147, 197, 114, 0); }
         }
 
     </style>
@@ -182,127 +196,33 @@
 
     <div class="story-container">
         
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/1.jpg" alt="The Beginning">
-            </div>
-            <div class="caption">
-                <h2>The Beginning</h2>
-                <p>Where it all started. A moment captured in time, just the two of you.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/1.jpg" alt="The Beginning"></div><div class="caption"><h2>The Beginning</h2><p>Where it all started. A moment captured in time, just the two of you.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/2.jpg" alt="Growing Closer">
-            </div>
-            <div class="caption">
-                <h2>Forever Feels</h2>
-                <p>The look of love that says "you are my everything!"</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/2.jpg" alt="Growing Closer"></div><div class="caption"><h2>Forever Feels</h2><p>The look of love that says "you are my everything!"</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/3.jpg" alt="Adventures Shared">
-            </div>
-            <div class="caption">
-                <h2>Adventures Await</h2>
-                <p>Exploring the world, hand in hand, with smiles as bright as the sun.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/3.jpg" alt="Adventures Shared"></div><div class="caption"><h2>Adventures Await</h2><p>Exploring the world, hand in hand, with smiles as bright as the sun.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/4.jpg" alt="Photo 4">
-            </div>
-            <div class="caption">
-                <h2>Pure Happiness</h2>
-                <p>The kind of joy that radiates and touches everyone around you.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/4.jpg" alt="Photo 4"></div><div class="caption"><h2>Pure Happiness</h2><p>The kind of joy that radiates and touches everyone around you.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/12.jpg" alt="Photo 5">
-            </div>
-            <div class="caption">
-                <h2>A Perfect Match</h2>
-                <p>Two souls that complement each other in every single way.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/12.jpg" alt="Photo 5"></div><div class="caption"><h2>A Perfect Match</h2><p>Two souls that complement each other in every single way.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/6.jpg" alt="Photo 6">
-            </div>
-            <div class="caption">
-                <h2>Making Memories</h2>
-                <p>From the big moments to the small ones, every second counts.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/6.jpg" alt="Photo 6"></div><div class="caption"><h2>Making Memories</h2><p>From the big moments to the small ones, every second counts.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/7.jpg" alt="Photo 7">
-            </div>
-            <div class="caption">
-                <h2>Side by Side</h2>
-                <p>Facing life's journey together, with unwavering support and love.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/7.jpg" alt="Photo 7"></div><div class="caption"><h2>Side by Side</h2><p>Facing life's journey together, with unwavering support and love.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/8.jpg" alt="Photo 8">
-            </div>
-            <div class="caption">
-                <h2>Timeless Love</h2>
-                <p>A love story that continues to unfold beautifully with each passing day.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/8.jpg" alt="Photo 8"></div><div class="caption"><h2>Timeless Love</h2><p>A love story that continues to unfold beautifully with each passing day.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/9.jpg" alt="Photo 9">
-            </div>
-            <div class="caption">
-                <h2>Elegance & Grace</h2>
-                <p>A couple that shines with sophistication and genuine affection.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/9.jpg" alt="Photo 9"></div><div class="caption"><h2>Elegance & Grace</h2><p>A couple that shines with sophistication and genuine affection.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/10.jpg" alt="Photo 10">
-            </div>
-            <div class="caption">
-                <h2>Laughter is Key</h2>
-                <p>May your lives always be filled with this much happiness and laughter.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/10.jpg" alt="Photo 10"></div><div class="caption"><h2>Laughter is Key</h2><p>May your lives always be filled with this much happiness and laughter.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/11.jpg" alt="Photo 11">
-            </div>
-            <div class="caption">
-                <h2>Inseparable</h2>
-                <p>Every day, a new memory, a stronger bond formed between hearts.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/11.jpg" alt="Photo 11"></div><div class="caption"><h2>Inseparable</h2><p>Every day, a new memory, a stronger bond formed between hearts.</p></div></div>
 
-        <div class="card">
-            <div class="image-wrapper">
-                <img src="images/5.jpg" alt="The 'Yes'">
-            </div>
-            <div class="caption">
-                <h2>The 'Yes'</h2>
-                <p>The start of your forever chapter. The most beautiful puzzle piece yet.</p>
-            </div>
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/5.jpg" alt="The 'Yes'"></div><div class="caption"><h2>The 'Yes'</h2><p>The start of your forever chapter. The most beautiful puzzle piece yet.</p></div></div>
 
-    </div> <div class="final-message">
+    </div> 
+
+    <div class="final-message">
         <h1>Congratulations!</h1>
         <p>
             Watching your journey has been beautiful. <br>
@@ -313,61 +233,71 @@
             With love,<br>
             <strong>Asem & Nedal</strong>
         </div>
+
+        <button class="celebrate-btn" onclick="fireConfetti()">Send Love ❤️</button>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const cards = document.querySelectorAll('.card');
 
-            // Options for the Intersection Observer
             const observerOptions = {
                 root: null,
-                threshold: 0.4 // Trigger when 40% of the card is visible
+                threshold: 0.4 
             };
 
-            // Observer to handle fade-in animations for images and captions
             const FadeObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    // Get image wrapper and caption within the current card
                     const imgWrapper = entry.target.querySelector('.image-wrapper');
                     const caption = entry.target.querySelector('.caption');
 
                     if (entry.isIntersecting) {
-                        // Add 'visible' class to trigger CSS transitions
                         if (imgWrapper) imgWrapper.classList.add('visible');
                         if (caption) caption.classList.add('visible');
                     } else {
-                        // Optional: Remove class to fade out when scrolling away
                         if (imgWrapper) imgWrapper.classList.remove('visible');
                         if (caption) caption.classList.remove('visible'); 
                     }
                 });
             }, observerOptions);
 
-            // Observe each card
             cards.forEach(card => {
                 FadeObserver.observe(card);
             });
 
-            // --- Simple Parallax Effect ---
-            // This function moves the image slightly within its wrapper based on scroll position
             function parallaxScroll() {
                 cards.forEach(card => {
                     const img = card.querySelector('img');
-                    // Get the card's position relative to the viewport
                     const rect = card.getBoundingClientRect();
-                    // Calculate a small offset value based on position
                     const offset = (rect.top - (window.innerHeight / 2)) * 0.1; 
-                    
-                    // Apply the offset as a transform to the image
                     if (img) {
                         img.style.transform = `translateY(${offset}px)`;
                     }
                 });
             }
-            // Listen for the scroll event to trigger the parallax function
             window.addEventListener('scroll', parallaxScroll);
         });
+
+        // --- CONFETTI LOGIC ---
+        function fireConfetti() {
+            // Fire confetti from the left edge
+            confetti({
+                particleCount: 100,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#93C572', '#ffffff', '#FFD700'] // Pistachio, White, Gold
+            });
+
+            // Fire a second burst after a small delay for dramatic effect
+            setTimeout(() => {
+                confetti({
+                    particleCount: 150,
+                    spread: 100,
+                    origin: { y: 0.7 },
+                    colors: ['#93C572', '#ffffff', '#FFD700']
+                });
+            }, 300);
+        }
     </script>
 
 </body>
