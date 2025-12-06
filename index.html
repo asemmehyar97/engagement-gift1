@@ -8,7 +8,7 @@
         /* RESET & BASICS */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            background-color: #f5f5f5; 
+            background-color: #000; 
             font-family: 'Georgia', serif; 
             color: white;
             overflow-x: hidden;
@@ -23,57 +23,62 @@
         .card {
             position: sticky;
             top: 0;
-            height: 100vh;
+            height: 100vh; 
             width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            box-shadow: 0 -10px 20px rgba(0,0,0,0.3); /* Shadow gives depth */
+            background-color: #000; 
+            box-shadow: 0 -10px 20px rgba(0,0,0,0.5); 
         }
 
         .card img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures photo covers screen perfectly */
+            object-fit: contain; 
+            display: block;
         }
 
-        /* CAPTION TEXT OVERLAY (Optional) */
+        /* CAPTION TEXT OVERLAY */
         .caption {
             position: absolute;
             bottom: 10%;
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            text-shadow: 1px 1px 10px rgba(0,0,0,0.8);
+            text-shadow: 2px 2px 15px rgba(0,0,0,1);
             width: 90%;
             opacity: 0;
             animation: fadeIn 2s forwards;
+            background-color: rgba(0, 0, 0, 0.4); 
+            padding: 15px;
+            border-radius: 8px;
+            pointer-events: none;
         }
         
-        .caption h2 { font-size: 2rem; margin-bottom: 10px; font-weight: 300; }
-        .caption p { font-size: 1rem; font-weight: 300; letter-spacing: 1px; }
+        .caption h2 { font-size: 1.8rem; margin-bottom: 5px; font-weight: 300; color: #fff; }
 
         @keyframes fadeIn { to { opacity: 1; } }
 
         /* FINAL MESSAGE SECTION */
         .final-message {
             position: relative; 
-            height: 100vh; 
+            min-height: 100vh; 
             background-color: #1a1a1a; 
-            color: #d4af37; /* Gold color */
+            color: #d4af37; 
             display: flex; 
             flex-direction: column;
             justify-content: center; 
             align-items: center; 
             text-align: center;
-            padding: 20px;
-            z-index: 100; /* Ensures it sits on top at the end */
+            padding: 40px 20px;
+            z-index: 100;
         }
 
-        .final-message h1 { font-size: 3rem; margin-bottom: 20px; }
-        .final-message p { font-size: 1.2rem; line-height: 1.6; max-width: 600px; color: #fff; }
-        .signature { margin-top: 40px; font-style: italic; color: #d4af37; }
+        .final-message h1 { font-size: 2.5rem; margin-bottom: 20px; }
+        .final-message p { font-size: 1.1rem; line-height: 1.6; max-width: 600px; color: #eee; margin-bottom: 30px; }
+        .signature { margin-top: 20px; font-style: italic; color: #d4af37; font-size: 1.2rem; }
 
     </style>
 </head>
@@ -84,7 +89,7 @@
         <div class="card">
             <img src="images/1.jpg" alt="Couple Photo 1">
             <div class="caption">
-                <h2>The Beginning</h2>
+                <h2>The Journey</h2>
             </div>
         </div>
 
@@ -102,6 +107,34 @@
 
         <div class="card">
             <img src="images/5.jpg" alt="Couple Photo 5">
+        </div>
+
+        <div class="card">
+            <img src="images/6.jpg" alt="Couple Photo 6">
+        </div>
+
+        <div class="card">
+            <img src="images/7.jpg" alt="Couple Photo 7">
+        </div>
+
+        <div class="card">
+            <img src="images/8.jpg" alt="Couple Photo 8">
+        </div>
+
+        <div class="card">
+            <img src="images/9.jpg" alt="Couple Photo 9">
+        </div>
+
+        <div class="card">
+            <img src="images/10.jpg" alt="Couple Photo 10">
+        </div>
+
+        <div class="card">
+            <img src="images/11.jpg" alt="Couple Photo 11">
+        </div>
+
+        <div class="card">
+            <img src="images/12.jpg" alt="Couple Photo 12">
         </div>
 
         <div class="final-message">
