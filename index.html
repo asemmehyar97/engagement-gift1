@@ -3,55 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Gift</title>
+    <title>A Special Gift for Asem & Nedal</title>
     <style>
-        /* --- COLOR PALETTE --- */
-        :root {
-            --pistachio: #A8C69F;     /* Soft Pistachio Green */
-            --deep-bg: #111a11;       /* Very dark green, almost black */
-            --text-light: #f0fdf4;    /* Off-white for readability */
-        }
-
         /* RESET & BASICS */
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html, body { height: 100%; }
         body { 
-            background-color: var(--deep-bg);
+            background-color: #000; 
             font-family: 'Georgia', serif; 
-            color: var(--text-light);
+            /* Pistachio Green Color */
+            color: #93C572; 
             overflow-x: hidden;
         }
 
-        /* --- ANIMATED RING BACKGROUND --- */
-        /* This div sits behind everything and holds the moving pattern */
-        .animated-bg {
+        /* VIDEO BACKGROUND SETUP */
+        #bg-video {
             position: fixed;
-            top: 0; left: 0;
-            width: 200%; /* Wider than screen for scrolling effect */
-            height: 200%; /* Taller than screen */
-            z-index: -1; /* Sends it to the very back */
-            opacity: 0.08; /* Very subtle transparency */
-            
-            /* This creates the ring pattern using pure CSS SVG data */
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cg fill='none' stroke='%23A8C69F' stroke-width='2'%3E%3Ccircle cx='35' cy='50' r='20'/%3E%3Ccircle cx='65' cy='50' r='20'/%3E%3C/g%3E%3C/svg%3E");
-            background-repeat: repeat;
-            
-            /* The animation setup */
-            animation: drift 60s linear infinite;
+            right: 0;
+            bottom: 0;
+            min-width: 100%; 
+            min-height: 100%;
+            z-index: -1; /* Places video behind everything else */
+            opacity: 0.6; /* Slight transparency to make text readable */
+            object-fit: cover; /* Ensures video covers screen without stretching */
         }
-
-        /* The animation definition: Slow diagonal movement */
-        @keyframes drift {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-50%, -50%); }
-        }
-
 
         /* SCROLLYTELLING CONTAINER */
         .story-container {
             width: 100%;
-            position: relative;
-            z-index: 2; /* Sits on top of animated bg */
+            /* Dark overlay to improve text readability against video */
+            background-color: rgba(0,0,0,0.6); 
         }
 
         /* THE PHOTO CARDS */
@@ -64,56 +44,70 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            /* Slightly transparent dark bg to make photos pop but let animation show subtly */
-            background-color: rgba(17, 26, 17, 0.8); 
-            box-shadow: 0 -10px 20px rgba(0,0,0,0.5); 
-            border-bottom: 1px solid rgba(168, 198, 159, 0.2); /* Subtle pistachio border */
+            /* Transparent background so video shows through */
+            background-color: transparent; 
+            /* Solid shadow to separate cards visually */
+            box-shadow: 0 -10px 20px rgba(0,0,0,0.8); 
+        }
+
+        /* IMAGE STYLING */
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .card img {
-            width: 100%;
-            height: 100%;
+            /* Adjust max-width/height to control image size on screen */
+            max-width: 90%; 
+            max-height: 80vh;
             object-fit: contain; 
             display: block;
-            /* Subtle shadow to lift photo off background */
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3)); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); /* Soft shadow for depth */
+            border-radius: 4px;
         }
 
-        /* CAPTION TEXT OVERLAY */
+        /* SCROLL-TRIGGERED TEXT CAPTIONS */
         .caption {
             position: absolute;
-            bottom: 10%;
+            /* Position text below image */
+            bottom: 5%; 
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
-            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
             width: 90%;
+            max-width: 600px;
+            /* Initial state: hidden and slightly lower */
             opacity: 0;
-            animation: fadeIn 3s forwards 0.5s; /* Delayed fade in */
-            /* Pistachio tinted dark background */
-            background-color: rgba(26, 38, 26, 0.7); 
+            transform: translate(-50%, 20px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+            z-index: 10;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8); /* Shadow for readability */
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background for text */
             padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--pistachio);
-            pointer-events: none;
+            border-radius: 10px;
+            /* Allows scrolling even if user touches the text area */
+            pointer-events: none; 
         }
         
-        .caption h2 { 
-            font-size: 1.8rem; 
-            margin-bottom: 5px; 
-            font-weight: 300; 
-            color: var(--pistachio); /* Pistachio text */
-            letter-spacing: 1px;
+        /* Class added by JavaScript when section is visible */
+        .caption.visible {
+            opacity: 1;
+            transform: translate(-50%, 0);
         }
 
-        @keyframes fadeIn { to { opacity: 1; } }
+        .caption h2 { font-size: 1.8rem; margin-bottom: 10px; font-weight: 400; }
+        .caption p { font-size: 1.1rem; line-height: 1.5; font-weight: 300; color: #e0e0e0; }
+
 
         /* FINAL MESSAGE SECTION */
         .final-message {
             position: relative; 
             min-height: 100vh; 
-            /* Gradient background from dark to pistachio tint */
-            background: linear-gradient(to bottom, var(--deep-bg), #2a3d2a);
+            background-color: transparent; 
             display: flex; 
             flex-direction: column;
             justify-content: center; 
@@ -121,105 +115,68 @@
             text-align: center;
             padding: 40px 20px;
             z-index: 100;
-            box-shadow: 0 -20px 30px rgba(0,0,0,0.5);
         }
 
-        .final-message h1 { 
-            font-size: 3rem; 
-            margin-bottom: 20px; 
-            color: var(--pistachio); 
-        }
-
-        /* Decorative line under Congratulations */
-        .final-message h1::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 3px;
-            background-color: var(--pistachio);
-            margin: 15px auto 0;
-            border-radius: 2px;
-        }
-
-        .final-message p { 
-            font-size: 1.2rem; 
-            line-height: 1.8; 
-            max-width: 600px; 
-            color: var(--text-light); 
-            margin-bottom: 40px; 
-        }
-        
-        .signature { 
-            margin-top: 20px; 
-            font-style: italic; 
-            color: var(--pistachio); 
-            font-size: 1.3rem; 
-        }
+        .final-message h1 { font-size: 3rem; margin-bottom: 20px; }
+        .final-message p { font-size: 1.3rem; line-height: 1.6; max-width: 600px; color: #f0f0f0; margin-bottom: 40px; }
+        .signature { margin-top: 30px; font-style: italic; font-size: 1.5rem; }
 
     </style>
 </head>
 <body>
 
-    <div class="animated-bg"></div>
+    <video autoplay muted loop id="bg-video">
+        <source src="images/background.mp4" type="video/mp4">
+    </video>
 
     <div class="story-container">
         
         <div class="card">
-            <img src="images/1.jpg" alt="Couple Photo 1">
-            <div class="caption">
-                <h2>The Journey Begins</h2>
+            <div class="image-wrapper">
+                <img src="images/1.jpg" alt="Photo 1">
+                <div class="caption">
+                    <h2>The Beginning</h2>
+                    <p>Where it all started. A moment captured in time.</p>
+                </div>
             </div>
         </div>
 
         <div class="card">
-            <img src="images/2.jpg" alt="Couple Photo 2">
+            <div class="image-wrapper">
+                <img src="images/2.jpg" alt="Photo 2">
+                <div class="caption">
+                    <h2>Growing Closer</h2>
+                    <p>Every day, a new memory, a stronger bond.</p>
+                </div>
+            </div>
         </div>
 
         <div class="card">
-            <img src="images/3.jpg" alt="Couple Photo 3">
+            <div class="image-wrapper">
+                <img src="images/3.jpg" alt="Photo 3">
+                <div class="caption">
+                    <h2>Adventures Shared</h2>
+                    <p>Exploring the world, hand in hand.</p>
+                </div>
+            </div>
         </div>
 
-        <div class="card">
-            <img src="images/4.jpg" alt="Couple Photo 4">
-        </div>
+        <div class="card"><div class="image-wrapper"><img src="images/4.jpg" alt="Photo 4"><div class="caption"><h2>A Beautiful Moment</h2><p>Add your own text here...</p></div></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/5.jpg" alt="Photo 5"><div class="caption"><h2>Laughter & Joy</h2><p>Add your own text here...</p></div></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/6.jpg" alt="Photo 6"><div class="caption"><h2>Unforgettable</h2><p>Add your own text here...</p></div></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/7.jpg" alt="Photo 7"><div class="caption"><h2>Together Always</h2><p>Add your own text here...</p></div></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/8.jpg" alt="Photo 8"><div class="caption"><h2>Cherished</h2><p>Add your own text here...</p></div></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/9.jpg" alt="Photo 9"><div class="caption"><h2>A Perfect Day</h2><p>Add your own text here...</p></div></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/10.jpg" alt="Photo 10"><div class="caption"><h2>Building Dreams</h2><p>Add your own text here...</p></div></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/11.jpg" alt="Photo 11"><div class="caption"><h2>Forever & Always</h2><p>Add your own text here...</p></div></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/12.jpg" alt="Photo 12"><div class="caption"><h2>The 'Yes'</h2><p>The start of your forever chapter.</p></div></div></div>
 
-        <div class="card">
-            <img src="images/5.jpg" alt="Couple Photo 5">
-        </div>
-
-        <div class="card">
-            <img src="images/6.jpg" alt="Couple Photo 6">
-        </div>
-
-        <div class="card">
-            <img src="images/7.jpg" alt="Couple Photo 7">
-        </div>
-
-        <div class="card">
-            <img src="images/8.jpg" alt="Couple Photo 8">
-        </div>
-
-        <div class="card">
-            <img src="images/9.jpg" alt="Couple Photo 9">
-        </div>
-
-        <div class="card">
-            <img src="images/10.jpg" alt="Couple Photo 10">
-        </div>
-
-        <div class="card">
-            <img src="images/11.jpg" alt="Couple Photo 11">
-        </div>
-
-        <div class="card">
-            <img src="images/12.jpg" alt="Couple Photo 12">
-        </div>
 
         <div class="final-message">
             <h1>Congratulations</h1>
             <p>
                 Watching your journey has been beautiful. <br>
-                May you build a life together as perfectly fitting as the puzzle pieces.<br>
+                May you build a life together as perfectly fitting as the puzzle pieces you've assembled.<br>
                 We wish you endless joy and love.
             </p>
             <div class="signature">
@@ -229,6 +186,34 @@
         </div>
 
     </div>
+
+    <script>
+        // This script uses IntersectionObserver to detect when a caption is in view.
+        // When it is, it adds the 'visible' class, triggering the CSS fade-in animation.
+        document.addEventListener("DOMContentLoaded", () => {
+            const captions = document.querySelectorAll('.caption');
+
+            const observerOptions = {
+                root: null, // Use the viewport as the root
+                threshold: 0.5 // Trigger when 50% of the caption is visible
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        // Optional: Remove class to fade out when scrolling away
+                        entry.target.classList.remove('visible'); 
+                    }
+                });
+            }, observerOptions);
+
+            captions.forEach(caption => {
+                observer.observe(caption);
+            });
+        });
+    </script>
 
 </body>
 </html>
