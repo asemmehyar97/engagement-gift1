@@ -12,32 +12,30 @@
         body { 
             background-color: #000; 
             font-family: 'Georgia', serif; 
-            /* Pistachio Green Color */
-            color: #93C572; 
+            color: #93C572; /* Pistachio Green */
             overflow-x: hidden;
         }
 
-        /* VIDEO BACKGROUND SETUP */
+        /* FIXED & CENTERED VIDEO BACKGROUND */
         #bg-video {
             position: fixed;
-            right: 0;
-            bottom: 0;
+            top: 0;
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Adjust for perfect centering */
             min-width: 100%; 
             min-height: 100%;
-            width: auto; 
+            width: auto;
             height: auto;
             z-index: -1; 
-            opacity: 0.5; /* Increased visibility slightly */
+            opacity: 0.5; 
             object-fit: cover; 
-            /* Fallback background color if video fails */
-            background: #000;
+            background: #000; /* Fallback */
         }
 
         /* MAIN CONTAINER */
         .story-container {
             width: 100%;
-            /* Darker gradient for mobile readability */
-            background: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.9));
+            background: rgba(0,0,0,0.2); /* Light overlay */
         }
 
         /* THE PHOTO CARDS */
@@ -51,26 +49,32 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            background-color: transparent; 
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.9);
+            
+            /* KEY FIX: Solid background ensures no messy overlapping */
+            background-color: #000; 
+            
+            box-shadow: 0 -5px 20px rgba(147, 197, 114, 0.1); /* Subtle green glow on edges */
             padding: 10px;
+            border-bottom: 1px solid #111; /* Separator line */
         }
 
         /* IMAGE STYLING */
         .image-wrapper {
             position: relative;
             width: auto;
-            max-height: 55vh; /* Smaller height for mobile so text fits */
+            max-height: 55vh; 
             max-width: 95%;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden; 
             border-radius: 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            /* Visible shadow to pop off the black background */
+            box-shadow: 0 10px 40px rgba(0,0,0,1); 
             opacity: 0;
             transform: scale(0.95);
             transition: all 0.8s ease-out;
+            background-color: #000; /* Double safety for overlaps */
         }
         .image-wrapper.visible {
             opacity: 1;
@@ -83,19 +87,19 @@
             object-fit: contain;
         }
 
-        /* SCROLL-TRIGGERED TEXT CAPTIONS */
+        /* CAPTIONS */
         .caption {
             position: relative;
             margin-top: 20px;
             text-align: center;
-            width: 95%; /* Wider on mobile */
+            width: 95%;
             max-width: 600px;
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
             transition: all 0.8s ease-out 0.2s; 
             z-index: 10;
-            /* Frosted glass */
-            background-color: rgba(0, 0, 0, 0.6); 
+            /* Frosted glass style */
+            background-color: rgba(20, 20, 20, 0.8); 
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 15px;
@@ -109,7 +113,7 @@
         }
 
         .caption h2 { 
-            font-size: 1.6rem; /* Smaller for mobile */
+            font-size: 1.6rem; 
             margin-bottom: 8px; 
             font-weight: 400; 
             letter-spacing: 1px;
@@ -119,23 +123,22 @@
             font-size: 1rem; 
             line-height: 1.5; 
             font-weight: 300; 
-            color: #eee; 
+            color: #ddd; 
         }
 
-        /* FINAL MESSAGE SECTION - FIXED READABILITY */
+        /* FINAL MESSAGE */
         .final-message {
             position: relative; 
             min-height: 100vh; 
-            /* SOLID BLACK BACKGROUND to cover previous image */
-            background-color: #000; 
+            background-color: #000; /* Solid black to cover last photo */
             display: flex; 
             flex-direction: column;
             justify-content: center; 
             align-items: center; 
             text-align: center;
             padding: 40px 20px;
-            z-index: 100; /* Sits on top of everything */
-            border-top: 1px solid #333;
+            z-index: 100; 
+            border-top: 2px solid #222;
         }
 
         .final-message h1 { 
@@ -158,7 +161,7 @@
             color: #93C572;
         }
 
-        /* SURPRISE BUTTON */
+        /* BUTTON */
         .celebrate-btn {
             background-color: #93C572; 
             color: #000;
@@ -171,21 +174,13 @@
             cursor: pointer;
             box-shadow: 0 0 20px rgba(147, 197, 114, 0.4);
             animation: pulse 2s infinite;
-            -webkit-tap-highlight-color: transparent; /* Removes blue tap box on mobile */
+            -webkit-tap-highlight-color: transparent;
         }
 
         @keyframes pulse {
             0% { box-shadow: 0 0 0 0 rgba(147, 197, 114, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(147, 197, 114, 0); }
             100% { box-shadow: 0 0 0 0 rgba(147, 197, 114, 0); }
-        }
-
-        /* --- MOBILE OPTIMIZATIONS --- */
-        @media (max-width: 768px) {
-            .final-message h1 { font-size: 2.5rem; }
-            .card { padding-top: 10vh; justify-content: flex-start; } /* Push content slightly down */
-            .image-wrapper { max-height: 50vh; width: 100%; }
-            .caption { margin-top: 15px; }
         }
 
     </style>
@@ -198,29 +193,18 @@
 
     <div class="story-container">
         
-        <div class="card"><div class="image-wrapper"><img src="images/1.jpg" alt="The Beginning"></div><div class="caption"><h2>The Beginning</h2><p>Where it all started. A moment captured in time, just the two of you.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/2.jpg" alt="Growing Closer"></div><div class="caption"><h2>Forever Feels</h2><p>The look of love that says "you are my everything!"</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/3.jpg" alt="Adventures Shared"></div><div class="caption"><h2>Adventures Await</h2><p>Exploring the world, hand in hand, with smiles as bright as the sun.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/4.jpg" alt="Photo 4"></div><div class="caption"><h2>Pure Happiness</h2><p>The kind of joy that radiates and touches everyone around you.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/12.jpg" alt="Photo 5"></div><div class="caption"><h2>A Perfect Match</h2><p>Two souls that complement each other in every single way.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/6.jpg" alt="Photo 6"></div><div class="caption"><h2>Making Memories</h2><p>From the big moments to the small ones, every second counts.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/7.jpg" alt="Photo 7"></div><div class="caption"><h2>Side by Side</h2><p>Facing life's journey together, with unwavering support and love.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/8.jpg" alt="Photo 8"></div><div class="caption"><h2>Timeless Love</h2><p>A love story that continues to unfold beautifully with each passing day.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/9.jpg" alt="Photo 9"></div><div class="caption"><h2>Elegance & Grace</h2><p>A couple that shines with sophistication and genuine affection.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/10.jpg" alt="Photo 10"></div><div class="caption"><h2>Laughter is Key</h2><p>May your lives always be filled with this much happiness and laughter.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/11.jpg" alt="Photo 11"></div><div class="caption"><h2>Inseparable</h2><p>Every day, a new memory, a stronger bond formed between hearts.</p></div></div>
-
-        <div class="card"><div class="image-wrapper"><img src="images/5.jpg" alt="The 'Yes'"></div><div class="caption"><h2>The 'Yes'</h2><p>The start of your forever chapter. The most beautiful puzzle piece yet.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/1.jpg" alt="1"></div><div class="caption"><h2>The Beginning</h2><p>Where it all started. A moment captured in time, just the two of you.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/2.jpg" alt="2"></div><div class="caption"><h2>Forever Feels</h2><p>The look of love that says "you are my everything!"</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/3.jpg" alt="3"></div><div class="caption"><h2>Adventures Await</h2><p>Exploring the world, hand in hand, with smiles as bright as the sun.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/4.jpg" alt="4"></div><div class="caption"><h2>Pure Happiness</h2><p>The kind of joy that radiates and touches everyone around you.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/12.jpg" alt="5"></div><div class="caption"><h2>A Perfect Match</h2><p>Two souls that complement each other in every single way.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/6.jpg" alt="6"></div><div class="caption"><h2>Making Memories</h2><p>From the big moments to the small ones, every second counts.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/7.jpg" alt="7"></div><div class="caption"><h2>Side by Side</h2><p>Facing life's journey together, with unwavering support and love.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/8.jpg" alt="8"></div><div class="caption"><h2>Timeless Love</h2><p>A love story that continues to unfold beautifully with each passing day.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/9.jpg" alt="9"></div><div class="caption"><h2>Elegance & Grace</h2><p>A couple that shines with sophistication and genuine affection.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/10.jpg" alt="10"></div><div class="caption"><h2>Laughter is Key</h2><p>May your lives always be filled with this much happiness and laughter.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/11.jpg" alt="11"></div><div class="caption"><h2>Inseparable</h2><p>Every day, a new memory, a stronger bond formed between hearts.</p></div></div>
+        <div class="card"><div class="image-wrapper"><img src="images/5.jpg" alt="12"></div><div class="caption"><h2>The 'Yes'</h2><p>The start of your forever chapter. The most beautiful puzzle piece yet.</p></div></div>
 
     </div> 
 
@@ -241,64 +225,33 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            // MOBILE VIDEO FORCE PLAY
-            // Sometimes iPhones block autoplay. This forces it to play.
             const video = document.getElementById('bg-video');
-            if (video) {
-                video.play().catch(function(error) {
-                    console.log("Video autoplay blocked by browser policy.");
-                });
-            }
+            if (video) video.play().catch(e => console.log("Autoplay blocked"));
 
-            const cards = document.querySelectorAll('.card');
-
-            const observerOptions = {
-                root: null,
-                threshold: 0.2 // Lower threshold for mobile responsiveness
-            };
-
-            const FadeObserver = new IntersectionObserver((entries) => {
+            const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    const imgWrapper = entry.target.querySelector('.image-wrapper');
-                    const caption = entry.target.querySelector('.caption');
-
                     if (entry.isIntersecting) {
-                        if (imgWrapper) imgWrapper.classList.add('visible');
-                        if (caption) caption.classList.add('visible');
+                        entry.target.classList.add('visible');
                     } else {
-                        if (imgWrapper) imgWrapper.classList.remove('visible');
-                        if (caption) caption.classList.remove('visible'); 
+                        // Keep visible once scrolled to prevent flickering
+                        // entry.target.classList.remove('visible'); 
                     }
                 });
-            }, observerOptions);
+            }, { threshold: 0.2 });
 
-            cards.forEach(card => {
-                FadeObserver.observe(card);
-            });
+            document.querySelectorAll('.image-wrapper, .caption').forEach(el => observer.observe(el));
         });
 
-        // --- CONFETTI LOGIC ---
         function fireConfetti() {
-            var duration = 3 * 1000;
-            var animationEnd = Date.now() + duration;
+            var duration = 3000;
+            var end = Date.now() + duration;
             var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999 };
 
-            function randomInRange(min, max) {
-                return Math.random() * (max - min) + min;
-            }
-
             var interval = setInterval(function() {
-                var timeLeft = animationEnd - Date.now();
-
-                if (timeLeft <= 0) {
-                    return clearInterval(interval);
-                }
-
+                var timeLeft = end - Date.now();
+                if (timeLeft <= 0) return clearInterval(interval);
                 var particleCount = 50 * (timeLeft / duration);
-                
-                // Fire from two different angles
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 }, colors: ['#93C572', '#ffffff', '#FFD700'] }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 }, colors: ['#93C572', '#ffffff', '#FFD700'] }));
+                confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 }, colors: ['#93C572', '#ffffff', '#FFD700'] }));
             }, 250);
         }
     </script>
