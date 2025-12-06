@@ -137,7 +137,8 @@
         .final-message {
             position: relative; 
             min-height: 100vh; 
-            background-color: transparent; 
+            /* Dark background to separate from the last photo */
+            background-color: rgba(0,0,0,0.85); 
             display: flex; 
             flex-direction: column;
             justify-content: center; 
@@ -145,8 +146,7 @@
             text-align: center;
             padding: 40px 20px;
             z-index: 100;
-            /* Ensure final message doesn't get stuck under last card */
-            margin-bottom: 50px; 
+            box-shadow: 0 -10px 30px rgba(0,0,0,1);
         }
 
         .final-message h1 { 
@@ -224,7 +224,7 @@
 
         <div class="card">
             <div class="image-wrapper">
-                <img src="images/5.jpg" alt="Photo 5">
+                <img src="images/12.jpg" alt="Photo 5">
             </div>
             <div class="caption">
                 <h2>A Perfect Match</h2>
@@ -294,7 +294,7 @@
 
         <div class="card">
             <div class="image-wrapper">
-                <img src="images/12.jpg" alt="The 'Yes'">
+                <img src="images/5.jpg" alt="The 'Yes'">
             </div>
             <div class="caption">
                 <h2>The 'Yes'</h2>
@@ -302,20 +302,17 @@
             </div>
         </div>
 
-
-        <div class="final-message">
-            <h1>Congratulations!</h1>
-            <p>
-                Watching your journey has been beautiful. <br>
-                May you build a life together as perfectly fitting as the puzzle pieces you've assembled.<br>
-                We wish you endless joy and love.
-            </p>
-            <div class="signature">
-                With love,<br>
-                <strong>Asem & Nedal</strong>
-            </div>
+    </div> <div class="final-message">
+        <h1>Congratulations!</h1>
+        <p>
+            Watching your journey has been beautiful. <br>
+            May you build a life together as perfectly fitting as the puzzle pieces you've assembled.<br>
+            We wish you endless joy and love.
+        </p>
+        <div class="signature">
+            With love,<br>
+            <strong>Asem & Nedal</strong>
         </div>
-
     </div>
 
     <script>
@@ -375,7 +372,3 @@
 
 </body>
 </html>
-
-
-
-
